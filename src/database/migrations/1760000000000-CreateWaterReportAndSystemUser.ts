@@ -8,7 +8,7 @@ export class CreateWaterReportAndSystemUser1760000000000 implements MigrationInt
       new Table({
         name: 'SYSTEM_USER',
         columns: [
-          { name: 'id', type: 'serial', isPrimary: true, isGenerated: true, generationStrategy: 'increment' },
+          { name: 'id', type: 'integer', isPrimary: true, isGenerated: true, generationStrategy: 'increment' },
           { name: 'name', type: 'varchar' },
           { name: 'email', type: 'varchar', isUnique: true },
           { name: 'password', type: 'varchar' },
@@ -21,7 +21,7 @@ export class CreateWaterReportAndSystemUser1760000000000 implements MigrationInt
       new Table({
         name: 'WATER_REPORT',
         columns: [
-          { name: 'id', type: 'serial', isPrimary: true, isGenerated: true, generationStrategy: 'increment' },
+          { name: 'id', type: 'integer', isPrimary: true, isGenerated: true, generationStrategy: 'increment' },
           { name: 'address', type: 'varchar' },
           { name: 'description', type: 'text' },
           { name: 'severity', type: 'varchar' },
