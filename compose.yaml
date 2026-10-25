@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME:?Configura DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER:?Configura DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:?Configura DATABASE_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+  api:
+    image: ${DOCKER_USER:?Configura DOCKER_USER}/${DOCKER_IMAGE:?Configura DOCKER_IMAGE}:latest
+    environment:
+      PORT: 3000
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: ${DATABASE_NAME:?Configura DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER:?Configura DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:?Configura DATABASE_PASSWORD}
+      DATABASE_SSL: "false"
+      SMTP_HOST: ${SMTP_HOST:?Configura SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_REQUIRE_TLS: "true"
+      SMTP_USER: ${SMTP_USER:?Configura SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:?Configura SMTP_PASSWORD}
+      SMTP_FROM: ${SMTP_FROM:?Configura SMTP_FROM}
+      MAINTENANCE_EMAIL: ${MAINTENANCE_EMAIL:?Configura MAINTENANCE_EMAIL}
+      AWS_REGION: ${AWS_REGION:?Configura AWS_REGION}
+      AWS_S3_BUCKET: ${AWS_S3_BUCKET:?Configura AWS_S3_BUCKET}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:?Configura AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:?Configura AWS_SECRET_ACCESS_KEY}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN:-}
+    ports:
+      - "127.0.0.1:${PORT:-3000}:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

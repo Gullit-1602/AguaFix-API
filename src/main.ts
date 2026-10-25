@@ -5,8 +5,8 @@ import { envs } from './config/envs';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }));
-  await app.listen(envs.port);
+  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true, forbidNonWhitelisted: true }));
+  await app.listen(envs.port, envs.host);
 }
 
 void bootstrap();

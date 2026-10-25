@@ -1,4 +1,5 @@
 import { EmailService } from '../email/email.service';
+import { StorageService } from '../storage/storage.service';
 import { ReportsRepository } from './repositories/reports.repository';
 import { ReportsService } from './reports.service';
 import { ReportSeverity } from './entities/report.entity';
@@ -11,7 +12,11 @@ describe('ReportsService', () => {
   const emailService = {
     sendEmail: jest.fn(),
   } as unknown as EmailService;
-  const reportsService = new ReportsService(reportsRepository, emailService);
+  const storageService = {
+    uploadFile: jest.fn().mockResolvedValue('https://example.com/reports/foto.png'),
+    deleteFile: jest.fn().mockResolvedValue(undefined),
+  } as unknown as StorageService;
+  const reportsService = new ReportsService(reportsRepository, emailService, storageService);
 
   beforeEach(() => jest.clearAllMocks());
 
@@ -26,10 +31,12 @@ describe('ReportsService', () => {
     reportsRepository.createAndSave = jest.fn().mockResolvedValue(savedReport);
     emailService.sendEmail = jest.fn().mockResolvedValue(undefined);
 
-    const result = await reportsService.create(reportDto);
+    const result = await reportsService.create(reportDto, {} as Express.Multer.File);
 
     expect(result).toEqual(savedReport);
-    expect(reportsRepository.createAndSave).toHaveBeenCalledWith(reportDto);
+    expect(reportsRepository.createAndSave).toHaveBeenCalledWith({
+      ...reportDto, photoUrl: 'https://example.com/reports/foto.png',
+    });
     expect(emailService.sendEmail).toHaveBeenCalledWith(
       expect.any(String),
       'Nuevo reporte de fuga en Av. Central 123',

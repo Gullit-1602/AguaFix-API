@@ -11,9 +11,12 @@
     "migration:run": "typeorm-ts-node-commonjs -d src/database/data-source.ts migration:run",
     "migration:revert": "typeorm-ts-node-commonjs -d src/database/data-source.ts migration:revert",
     "migration:generate": "typeorm-ts-node-commonjs -d src/database/data-source.ts migration:generate src/database/migrations/WaterReportMigration",
-    "test": "jest"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "migration:run:prod": "node node_modules/typeorm/cli.js -d dist/database/data-source.js migration:run",
+    "migration:revert:prod": "node node_modules/typeorm/cli.js -d dist/database/data-source.js migration:revert"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1156.0",
     "@nestjs/common": "^11.0.0",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.0",
@@ -37,6 +40,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/express": "^5.0.1",
     "@types/jest": "^29.5.14",
+    "@types/multer": "^2.3.0",
     "@types/node": "^22.15.0",
     "@types/nodemailer": "^6.4.17",
     "jest": "^29.7.0",

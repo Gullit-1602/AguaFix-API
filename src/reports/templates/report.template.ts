@@ -9,7 +9,7 @@ const escapeHtml = (value: string): string =>
     '"': '&quot;',
   })[character] as string);
 
-export const generateReportTemplate = (dto: CreateReportDto): string => `<!doctype html>
+export const generateReportTemplate = (dto: CreateReportDto, photoUrl: string): string => `<!doctype html>
 <html lang="es">
   <head><meta charset="utf-8"><title>Nuevo reporte de fuga</title></head>
   <body style="font-family:Arial,sans-serif;color:#1f2937;line-height:1.5">
@@ -20,5 +20,6 @@ export const generateReportTemplate = (dto: CreateReportDto): string => `<!docty
       <tr><th style="text-align:left;background:#e6fffb;padding:10px;border:1px solid #cbd5e1">Severidad</th><td style="padding:10px;border:1px solid #cbd5e1">${escapeHtml(dto.severity)}</td></tr>
       <tr><th style="text-align:left;background:#e6fffb;padding:10px;border:1px solid #cbd5e1">Telefono de contacto</th><td style="padding:10px;border:1px solid #cbd5e1">${escapeHtml(dto.reporterPhone)}</td></tr>
     </table>
+    <p><img src="${escapeHtml(photoUrl)}" alt="Foto de la fuga" width="600" style="max-width:100%;height:auto;border-radius:8px"></p>
   </body>
 </html>`;
