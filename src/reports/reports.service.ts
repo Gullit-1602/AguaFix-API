@@ -28,7 +28,7 @@ export class ReportsService {
       } catch {
         this.logger.error('No se pudo retirar de S3 la foto del reporte fallido; revisar objetos huerfanos en reports/');
       }
-      throw new ServiceUnavailableException('No se pudo guardar el reporte');
+      throw new ServiceUnavailableException('No se pudo guardar el reporte, intente luego.');
     }
     try {
       await this.emailService.sendEmail(
