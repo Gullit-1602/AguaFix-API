@@ -4,3 +4,13 @@ dist/
 *.log
 .env.*
 !.env.example
+*.env
+*.pem
+*.key
+*.p12
+*.pfx
+.aws/
+.npmrc
+secrets/
+certs/
+coverage/
